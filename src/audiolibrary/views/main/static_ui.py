@@ -136,6 +136,7 @@ class UiMainWindow:
                 """.replace(
             "$HOVER", widgets_factory.theme.hover
         ))
+        self.signin_button = signin_button
         menu_header_info_layout.addWidget(signin_button)
         menu_header_layout.addItem(
             QtWidgets.QSpacerItem(20, 0, QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)

@@ -39,6 +39,7 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
         self.ui.menu_settings_button.clicked.connect(self.menu_settings_button_clicked)
         self.ui.settings_item.triggered.connect(self.controller.show_settings)
         self.ui.about_item.triggered.connect(self.about_dialog)
+        self.ui.signin_button.clicked.connect(self.controller.show_auth)
 
     def model_changed(self):
         pass
@@ -132,3 +133,7 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
         point = self.ui.menu_settings_button.rect().topLeft()
         point.setY(point.y() - (self.ui.context_menu.height() + self.ui.menu_settings_button.height()))
         self.ui.context_menu.exec(self.ui.menu_settings_button.mapToGlobal(point))
+
+    def closeEvent(self, event):
+        self.controller.close()
+        event.accept()

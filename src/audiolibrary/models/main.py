@@ -1,6 +1,7 @@
 import psutil
 
-from audiolibrary.config import InIConfig, Contact
+from audiolibrary.api_service import APIServiceV1
+from audiolibrary.config import Contact
 from audiolibrary.models.base import BaseModel
 
 from enum import Enum
@@ -16,12 +17,16 @@ class MenuItem(str, Enum):
 
 class MainModel(BaseModel):
 
-    def __init__(self, is_debug: bool, app_title: str, app_version: str, contact: Contact):
+    def __init__(self, api_service: APIServiceV1, **scope):
         super().__init__()
-        self.is_debug = is_debug
-        self.app_title = app_title
-        self.app_version = app_version
-        self.contact = contact
+        self.is_debug = scope["is_debug"]
+        self.is_auth = property(fget=lambda x: api_service.current_user().get("error") is None)
+        self.app_title = scope["app_title"]
+        self.app_version = scope["app_version"]
+        self.contact = scope["contact"]
+        self.scope = scope
+
+        self.api_service = api_service
 
     @staticmethod
     def get_ram_usage() -> int:

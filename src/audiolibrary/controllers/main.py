@@ -14,10 +14,11 @@ from audiolibrary.views.widgets import WidgetsFactory
 
 class MainController:
 
-    def __init__(self, model: 'MainModel', widgets_factory: 'WidgetsFactory', config: 'InIConfig'):
+    def __init__(self, model: 'MainModel', widgets_factory: 'WidgetsFactory', config: 'InIConfig', app_controller):
         self.model = model
         self.config = config
         self.widgets_factory = widgets_factory
+        self.app_controller = app_controller
         self.view = MainView(self, self.model, widgets_factory)
 
         self.view.show()
@@ -27,6 +28,14 @@ class MainController:
         SettingsController(
             SettingsModel(self.config), self.widgets_factory, self.view
         )
+
+    def show_auth(self):
+        self.view.close()
+        self.app_controller.auth()
+
+    def logout(self):
+        self.model.logout()
+        self.show_auth()
 
     def show_page(self, page_id: MenuItem):
         match page_id:
@@ -47,3 +56,7 @@ class MainController:
                 UploadController(model, self.widgets_factory, self.view)
             case _:
                 raise ValueError(f"Unknown menu item type: {page_id!r}")
+
+    def close(self):
+        # self.model.save_session()
+        ...
