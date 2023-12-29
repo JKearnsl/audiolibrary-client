@@ -63,8 +63,13 @@ def main():
 
     widgets_factory = WidgetsFactory(theme[0])
 
-    model = MainModel(theme, config)
-    controller = MainController(model, widgets_factory)
+    model = MainModel(
+        is_debug=config.VAR.BASE.DEBUG,
+        app_title=config.VAR.BASE.APP_NAME,
+        app_version=config.VAR.VERSION,
+        contact=config.VAR.BASE.CONTACT,
+    )
+    controller = MainController(model, widgets_factory, config)
 
     app.exec()
 
