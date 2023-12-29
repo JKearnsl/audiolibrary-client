@@ -1,15 +1,16 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 from audiolibrary.models.main import MenuItem
+from audiolibrary.utils.icon import svg_ico
 from audiolibrary.views.widgets import WidgetsFactory, Label
 from audiolibrary.views.widgets.list import ListItemWidget
 
 
 class UiMainWindow:
     def setup_ui(
-            self, main_window: QtWidgets.QWidget,
+            self,
+            main_window: QtWidgets.QWidget,
             widgets_factory: WidgetsFactory,
-            theme_class,
             version: str,
             app_name: str,
     ):
@@ -26,7 +27,7 @@ class UiMainWindow:
                 border-radius: 3px;
                 color: #000000;
             }
-        """.replace("$BG1", theme_class.first_background))
+        """.replace("$BG1", widgets_factory.theme.first_background))
         central_layout = QtWidgets.QHBoxLayout(main_window)
         central_layout.setContentsMargins(0, 0, 0, 0)
         central_layout.setSpacing(0)
@@ -40,9 +41,9 @@ class UiMainWindow:
                 border-right: 1px solid $HOVER;
             }
         """.replace(
-            "$BG2", theme_class.second_background
+            "$BG2", widgets_factory.theme.second_background
         ).replace(
-            "$HOVER", theme_class.hover
+            "$HOVER", widgets_factory.theme.hover
         ))
         menu_widget.setFixedWidth(270)
         menu_layout = QtWidgets.QVBoxLayout(menu_widget)
@@ -53,6 +54,7 @@ class UiMainWindow:
         menu_header_widget = QtWidgets.QWidget()
         menu_header_widget.setObjectName("menu_header_widget")
         menu_header_widget.setToolTip(f"{app_name} {version}")
+        menu_layout.addWidget(menu_header_widget)
 
         menu_header_layout = QtWidgets.QHBoxLayout(menu_header_widget)
         menu_header_layout.setContentsMargins(0, 15, 0, 10)
@@ -60,25 +62,27 @@ class UiMainWindow:
             QtWidgets.QSpacerItem(20, 0, QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         )
 
-        # Menu header logo widget
-        menu_header_logo_widget = QtWidgets.QWidget()
-        menu_header_logo_widget.setObjectName("menu_header_logo_widget")
-        menu_header_logo_widget.setFixedHeight(50)
+        # Menu header info widget
+        info_stub = QtWidgets.QWidget()
+        info_stub.setObjectName("menu_header_logo_widget")
+        info_stub.setFixedHeight(50)
 
-        menu_header_logo_layout = QtWidgets.QHBoxLayout(menu_header_logo_widget)
-        menu_header_logo_layout.setContentsMargins(0, 0, 0, 0)
-        menu_header_logo_layout.setSpacing(5)
+        menu_header_info_layout = QtWidgets.QHBoxLayout(info_stub)
+        menu_header_info_layout.setContentsMargins(0, 0, 0, 0)
+        menu_header_info_layout.setSpacing(5)
+        menu_header_layout.addWidget(info_stub)
 
         logo = QtWidgets.QLabel()
         logo.setObjectName("logo")
         logo.setPixmap(main_window.windowIcon().pixmap(QtCore.QSize(64, 64)))
         logo.setScaledContents(True)
         logo.setFixedSize(QtCore.QSize(32, 32))
-        menu_header_logo_layout.addWidget(logo)
+        menu_header_info_layout.addWidget(logo)
 
         program_title_layout = QtWidgets.QVBoxLayout()
         program_title_layout.setContentsMargins(4, 3, 0, 3)
         program_title_layout.setSpacing(0)
+        menu_header_info_layout.addLayout(program_title_layout)
 
         program_name_widget = QtWidgets.QLabel()
         program_name_widget.setObjectName("program_name_widget")
@@ -91,7 +95,7 @@ class UiMainWindow:
                 color: $TEXT_HEADER;
             }
         """.replace(
-            "$TEXT_HEADER", theme_class.text_header
+            "$TEXT_HEADER", widgets_factory.theme.text_header
         ))
         program_title_layout.addWidget(program_name_widget)
 
@@ -105,15 +109,37 @@ class UiMainWindow:
                 color: $TEXT_SECONDARY;
             }
         """.replace(
-            "$TEXT_SECONDARY", theme_class.text_secondary
+            "$TEXT_SECONDARY", widgets_factory.theme.text_secondary
         ))
         program_title_layout.addWidget(program_version_widget)
 
-        menu_header_logo_layout.addLayout(program_title_layout)
+        menu_header_layout.addItem(
+            QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
+        )
 
-        menu_header_layout.addWidget(menu_header_logo_widget)
-
-        menu_layout.addWidget(menu_header_widget)
+        # Header Buttons
+        signin_button = QtWidgets.QToolButton()
+        signin_button.setObjectName("signin_button")
+        signin_button.setIcon(QtGui.QIcon(svg_ico("icons:signin.svg", widgets_factory.theme.text_primary)))
+        signin_button.setIconSize(QtCore.QSize(32, 32))
+        signin_button.setStyleSheet("""
+            QToolButton#signin_button {
+                border-radius: 5px;
+                background-color: transparent;
+            }
+            QToolButton#signin_button:hover {
+                background-color: $HOVER;
+            }
+            QToolButton#signin_button:pressed {
+                background-color: transparent;
+            }
+                """.replace(
+            "$HOVER", widgets_factory.theme.hover
+        ))
+        menu_header_info_layout.addWidget(signin_button)
+        menu_header_layout.addItem(
+            QtWidgets.QSpacerItem(20, 0, QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
+        )
 
         # Menu list
         menu_list_widget = widgets_factory.list()
@@ -155,11 +181,11 @@ class UiMainWindow:
                 background-color: transparent;
             }
         """.replace(
-            "$HOVER", theme_class.hover
+            "$HOVER", widgets_factory.theme.hover
         ))
         self.menu_settings_button = menu_settings_button
 
-        memory_usage_label = Label(theme_class.text_secondary)
+        memory_usage_label = Label(widgets_factory.theme.text_secondary)
         memory_usage_label.setObjectName("memory_usage_label")
         memory_usage_label.add_style("""
             QLabel#memory_usage_label {
@@ -211,15 +237,15 @@ class UiMainWindow:
                 background-color: $HOVER_COLOR;
             } 
                 """.replace(
-            "$PRIMARY_COLOR", theme_class.text_primary
+            "$PRIMARY_COLOR", widgets_factory.theme.text_primary
         ).replace(
-            "$BG2", theme_class.second_background
+            "$BG2", widgets_factory.theme.second_background
         ).replace(
-            "$SELECTED_COLOR", theme_class.selection
+            "$SELECTED_COLOR", widgets_factory.theme.selection
         ).replace(
-            "$BG3", theme_class.third_background
+            "$BG3", widgets_factory.theme.third_background
         ).replace(
-            "$HOVER_COLOR", theme_class.hover
+            "$HOVER_COLOR", widgets_factory.theme.hover
         ))
         self.settings_item = context_menu.addAction("Settings")
         self.about_item = context_menu.addAction("About")
