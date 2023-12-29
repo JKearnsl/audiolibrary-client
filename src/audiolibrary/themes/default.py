@@ -16,3 +16,4 @@ class DefaultTheme(BaseTheme):
     text_header: str = "#010000"
     text_primary: str = "#010000"
     text_secondary: str = "#909fa6"
+    text_tertiary: str = "#ffffff"

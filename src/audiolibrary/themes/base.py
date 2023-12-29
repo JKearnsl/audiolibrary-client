@@ -13,3 +13,4 @@ class BaseTheme:
     text_header: str = "#ffffff"
     text_primary: str = "#ffffff"
     text_secondary: str = "#ffffff"
+    text_tertiary: str = "#ffffff"
