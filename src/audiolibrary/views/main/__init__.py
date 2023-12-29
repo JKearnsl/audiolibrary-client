@@ -1,4 +1,5 @@
 from PyQt6 import QtWidgets, QtCore
+from PyQt6.QtCore import QModelIndex
 from PyQt6.QtWidgets import QWidget
 from apscheduler.schedulers.qt import QtScheduler
 
@@ -47,17 +48,22 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
         self.ui.memory_usage_label.setText(f"ОЗУ: {self.model.get_ram_usage()} МБ")
 
     def model_loaded(self):
+        for i in range(self.ui.menu_list_widget.model().rowCount()):
+            item = self.ui.menu_list_widget.model().item(i)
+            item.set_icon_color(self.model.theme[0].text_primary)
         self.ui.menu_list_widget.setCurrentIndex(self.ui.menu_list_widget.model().index(0, 0))
 
-    def menu_select_changed(self, *args):
-        index = self.ui.menu_list_widget.currentIndex().row()
-        item = self.ui.menu_list_widget.model().item(index)
+    def menu_select_changed(self, current: QModelIndex, prev: QModelIndex):
+        item = self.ui.menu_list_widget.model().item(current.row())
+        item.set_icon_color(self.model.theme[0].text_tertiary)
 
         if self.ui.content_layout.count() > 0:
-            self.ui.content_layout.setCurrentIndex(0)
             current_widget = self.ui.content_layout.currentWidget()
             if current_widget.id == item.id:
                 return
+
+            prev_item = self.ui.menu_list_widget.model().item(prev.row())
+            prev_item.set_icon_color(self.model.theme[0].text_primary)
 
             # Кэш
             for i in range(self.ui.content_layout.count()):
@@ -71,7 +77,7 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
     def about_dialog(self):
         modal = self.widgets_factory.modal(self)
         modal.setWindowTitle("О программе")
-        modal.setFixedSize(300, 200)
+        modal.setFixedSize(320, 350)
 
         modal.setObjectName("modal")
 
@@ -112,9 +118,13 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
         text_widget.setWordWrap(True)
         text_widget.setText(
             f"### {self.model.config.VAR.BASE.APP_NAME} | {self.model.config.VAR.VERSION}\n\n"
-            "Программа разработана в рамках лабораторной работы\n\n\n"
+            "Программа разработана в рамках курсовой работы\n\n\n"
             "Разработчик: "
             f"<a href='{self.model.config.VAR.BASE.CONTACT.URL}'>{self.model.config.VAR.BASE.CONTACT.NAME}</a> 2023"
+            "\n\nОгромная благодарность за иконки: \n\n"
+            '<a href="https://www.flaticon.com/ru/authors/kerismaker">kerismaker</a>\n\n'
+            '<a href="https://www.flaticon.com/ru/authors/those-icons">those-icons</a>\n\n'
+
         )
         central_layout.addWidget(text_widget)
         modal.exec()

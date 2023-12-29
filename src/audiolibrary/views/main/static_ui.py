@@ -44,7 +44,7 @@ class UiMainWindow:
         ).replace(
             "$HOVER", theme_class.hover
         ))
-        menu_widget.setFixedWidth(300)
+        menu_widget.setFixedWidth(270)
         menu_layout = QtWidgets.QVBoxLayout(menu_widget)
         menu_layout.setContentsMargins(0, 0, 0, 0)
         central_layout.addWidget(menu_widget)
@@ -118,14 +118,15 @@ class UiMainWindow:
         # Menu list
         menu_list_widget = widgets_factory.list()
         menu_list_widget.setObjectName("menu_list_widget")
+        menu_list_widget.setIconSize(QtCore.QSize(16, 16))
         menu_list_model = menu_list_widget.model()
         self.menu_select_model = menu_list_widget.selectionModel()
 
-        self.menu_item_browse = ListItemWidget("Menu item 1", MenuItem.BROWSE)
-        self.menu_item_liked = ListItemWidget("Menu item 2", MenuItem.LIKED)
-        self.menu_item_popular = ListItemWidget("Menu item 3", MenuItem.POPULAR)
-        self.menu_item_control = ListItemWidget("Menu item 4", MenuItem.CONTROL)
-        self.menu_item_upload = ListItemWidget("Menu item 5", MenuItem.UPLOAD)
+        self.menu_item_browse = ListItemWidget("Menu item 1", MenuItem.BROWSE, "icons:browse.svg")
+        self.menu_item_liked = ListItemWidget("Menu item 2", MenuItem.LIKED, "icons:liked.svg")
+        self.menu_item_popular = ListItemWidget("Menu item 3", MenuItem.POPULAR, "icons:popular.svg")
+        self.menu_item_control = ListItemWidget("Menu item 4", MenuItem.CONTROL, "icons:control.svg")
+        self.menu_item_upload = ListItemWidget("Menu item 5", MenuItem.UPLOAD, "icons:upload.svg")
 
         menu_list_model.appendRow(self.menu_item_browse)
         menu_list_model.appendRow(self.menu_item_liked)
@@ -220,8 +221,8 @@ class UiMainWindow:
         ).replace(
             "$HOVER_COLOR", theme_class.hover
         ))
-        self.settings_item = context_menu.addAction("Настойки")
-        self.about_item = context_menu.addAction("О программе")
+        self.settings_item = context_menu.addAction("Settings")
+        self.about_item = context_menu.addAction("About")
         self.context_menu = context_menu
 
         menu_tool_layout.addItem(
@@ -258,3 +259,5 @@ class UiMainWindow:
         self.menu_item_control.setText(_translate("menu_item_control", "Управление"))
         self.menu_item_upload.setText(_translate("menu_item_upload", "Загрузить"))
         self.menu_settings_button.setToolTip(_translate("menu_settings_button", "Настройки"))
+        self.settings_item.setText(_translate("settings_item", "Настройки"))
+        self.about_item.setText(_translate("about_item", "О программе"))
