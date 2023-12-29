@@ -14,7 +14,7 @@ ViewWidget = TypeVar('ViewWidget', bound=QWidget)
 class SettingsView(Dialog, DObserver, metaclass=TSMeta):
 
     def __init__(self, controller, model: SettingsModel, widgets_factory, parent: ViewWidget):
-        theme_class = model.theme[0]
+        theme_class = widgets_factory.theme
         super().__init__(
             third_background=theme_class.third_background,
             second_background=theme_class.second_background,
@@ -27,7 +27,7 @@ class SettingsView(Dialog, DObserver, metaclass=TSMeta):
         self.widgets_factory = widgets_factory
 
         self.ui = UiSettings()
-        self.ui.setup_ui(self, self.model.theme[0], widgets_factory)
+        self.ui.setup_ui(self, widgets_factory)
 
         # Регистрация представлений
         self.model.add_observer(self)
@@ -42,7 +42,7 @@ class SettingsView(Dialog, DObserver, metaclass=TSMeta):
         current_theme_index = 0
         for theme_name, theme in self.model.get_themes().items():
             self.ui.ch_color_theme_widget.addItem(theme_name, theme)
-            if theme_name == self.model.theme[0].__title__:
+            if theme_name == self.widgets_factory.theme.__title__:
                 current_theme_index = self.ui.ch_color_theme_widget.count() - 1
         self.ui.ch_color_theme_widget.setCurrentIndex(current_theme_index)
         self.ui.ch_color_theme_widget.blockSignals(False)

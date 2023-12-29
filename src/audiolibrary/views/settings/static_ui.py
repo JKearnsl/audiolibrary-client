@@ -4,7 +4,7 @@ from audiolibrary.views.widgets import WidgetsFactory
 
 
 class UiSettings:
-    def setup_ui(self, settings_page: QtWidgets.QWidget, theme_class, widgets_factory: WidgetsFactory):
+    def setup_ui(self, settings_page: QtWidgets.QWidget, widgets_factory: WidgetsFactory):
         settings_page.setObjectName("settings_page")
 
         settings_page_layout = settings_page.layout()

@@ -4,7 +4,7 @@ from audiolibrary.views.widgets import WidgetsFactory
 
 
 class UiLikedPage:
-    def setup_ui(self, page: QtWidgets.QWidget, theme_class, widgets_factory: WidgetsFactory):
+    def setup_ui(self, page: QtWidgets.QWidget, widgets_factory: WidgetsFactory):
         page.setObjectName("page")
         page_layout = QtWidgets.QVBoxLayout(page)
         page_layout.setContentsMargins(0, 0, 0, 0)
@@ -17,7 +17,7 @@ class UiLikedPage:
                 background-color: $BG3;
             }
         """.replace(
-            "$BG3", theme_class.third_background)
+            "$BG3", widgets_factory.theme.third_background)
         )
         page_layout.addWidget(customize_sheet)
 

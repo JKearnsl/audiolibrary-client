@@ -25,7 +25,7 @@ class ControlView(QWidget, DObserver, metaclass=TSMeta):
         parent.ui.content_layout.setCurrentWidget(self)
 
         self.ui = UiControlPage()
-        self.ui.setup_ui(self, self.model.theme[0], widgets_factory)
+        self.ui.setup_ui(self, widgets_factory)
 
         # Регистрация представлений
         self.model.add_observer(self)
