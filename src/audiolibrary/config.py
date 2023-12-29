@@ -17,6 +17,7 @@ class Base:
     APP_NAME: str
     DEBUG: bool
     THEME_TITLE: str
+    API_URL: str
     CONTACT: Contact
 
 
@@ -44,6 +45,7 @@ class InIConfig:
                 APP_NAME=config["BASE"]["APP_NAME"],
                 DEBUG=str_to_bool(config["BASE"]["DEBUG"]),
                 THEME_TITLE=config["BASE"]["THEME_TITLE"],
+                API_URL=config["BASE"]["API_URL"],
                 CONTACT=Contact(
                     NAME=config["CONTACT"]["NAME"],
                     URL=config["CONTACT"]["URL"],
@@ -58,5 +60,5 @@ class InIConfig:
         self.__init__(self.path)
 
     def save(self):
-        with open(self.path, "w") as f:
-            self.raw.write(f)
+        with open(self.path, "w") as file:
+            self.raw.write(file)
