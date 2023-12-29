@@ -2,6 +2,7 @@ from typing import TypeVar
 
 from PyQt6.QtWidgets import QWidget
 
+from audiolibrary.themes.base import BaseTheme
 from audiolibrary.views.widgets.button import Button
 from audiolibrary.views.widgets.combo_box import ComboBox
 from audiolibrary.views.widgets.dialog import Dialog
@@ -24,7 +25,7 @@ QWidgetLike = TypeVar("QWidgetLike", bound=QWidget)
 
 
 class WidgetsFactory:
-    def __init__(self, theme_class):
+    def __init__(self, theme_class: BaseTheme):
         self.theme = theme_class
 
     def label(self, text: str = None, *, parent: QWidgetLike = None) -> Label:
