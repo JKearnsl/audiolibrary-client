@@ -77,7 +77,6 @@ class ListItemWidget(QtGui.QStandardItem):
 
     def set_icon_color(self, color: str):
         if self.svg_icon_path:
-            print(color)
             self.setIcon(svg_ico(self.svg_icon_path, color))
 
     def __repr__(self):
