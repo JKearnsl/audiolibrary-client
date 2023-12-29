@@ -9,7 +9,7 @@ class AuthController:
         self.model = model
         self.widgets_factory = widgets_factory
         self.app_controller = app_controller
-        self.view = AuthView(self, self.model)
+        self.view = AuthView(self, self.model, self.widgets_factory)
         self.view.model_loaded()
         self.view.show()
 
