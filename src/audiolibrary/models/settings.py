@@ -5,8 +5,8 @@ from audiolibrary.utils import theme as theme_utils
 
 class SettingsModel(BaseModel):
 
-    def __init__(self, theme, config: InIConfig):
-        super().__init__(theme)
+    def __init__(self, config: InIConfig):
+        super().__init__()
         self.config = config
 
         self.__loaded_themes = dict()

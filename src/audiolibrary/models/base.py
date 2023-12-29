@@ -1,12 +1,9 @@
 from abc import ABC
 
-from audiolibrary.themes.base import BaseTheme
-
 
 class BaseModel(ABC):
 
-    def __init__(self, theme: tuple[type[BaseTheme], str, str]):
-        self.theme = theme
+    def __init__(self):
         self._mObservers = []
 
     def add_observer(self, observer):
@@ -18,3 +15,7 @@ class BaseModel(ABC):
     def notify_observers(self):
         for observer in self._mObservers:
             observer.model_changed()
+
+    def raise_error(self, error):
+        for observer in self._mObservers:
+            observer.error_handler(error)

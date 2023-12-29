@@ -1,20 +1,22 @@
+from audiolibrary.config import InIConfig
 from audiolibrary.controllers.browse import BrowseController
 from audiolibrary.controllers.control import ControlController
 from audiolibrary.controllers.liked import LikedController
 from audiolibrary.controllers.popular import PopularController
 from audiolibrary.controllers.settings import SettingsController
-
 from audiolibrary.controllers.upload import UploadController
 from audiolibrary.models import BrowseModel, LikedModel, PopularModel, ControlModel, UploadModel
-from audiolibrary.models.settings import SettingsModel
 from audiolibrary.models.main import MainModel, MenuItem
+from audiolibrary.models.settings import SettingsModel
 from audiolibrary.views.main import MainView
+from audiolibrary.views.widgets import WidgetsFactory
 
 
 class MainController:
 
-    def __init__(self, model: 'MainModel', widgets_factory: 'WidgetsFactory'):
+    def __init__(self, model: 'MainModel', widgets_factory: 'WidgetsFactory', config: 'InIConfig'):
         self.model = model
+        self.config = config
         self.widgets_factory = widgets_factory
         self.view = MainView(self, self.model, widgets_factory)
 
@@ -23,25 +25,25 @@ class MainController:
 
     def show_settings(self):
         SettingsController(
-            SettingsModel(self.model.theme, self.model.config), self.widgets_factory, self.view
+            SettingsModel(self.config), self.widgets_factory, self.view
         )
 
     def show_page(self, page_id: MenuItem):
         match page_id:
             case MenuItem.BROWSE:
-                model = BrowseModel(self.model.theme, self.model.config)
+                model = BrowseModel()
                 BrowseController(model, self.widgets_factory, self.view)
             case MenuItem.LIKED:
-                model = LikedModel(self.model.theme, self.model.config)
+                model = LikedModel()
                 LikedController(model, self.widgets_factory, self.view)
             case MenuItem.POPULAR:
-                model = PopularModel(self.model.theme, self.model.config)
+                model = PopularModel()
                 PopularController(model, self.widgets_factory, self.view)
             case MenuItem.CONTROL:
-                model = ControlModel(self.model.theme, self.model.config)
+                model = ControlModel()
                 ControlController(model, self.widgets_factory, self.view)
             case MenuItem.UPLOAD:
-                model = UploadModel(self.model.theme, self.model.config)
+                model = UploadModel()
                 UploadController(model, self.widgets_factory, self.view)
             case _:
                 raise ValueError(f"Unknown menu item type: {page_id!r}")
