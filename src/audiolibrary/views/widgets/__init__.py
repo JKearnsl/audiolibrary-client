@@ -124,6 +124,7 @@ class WidgetsFactory:
             text_primary_color=self.theme.text_primary,
             hover_color=self.theme.hover,
             selection_color=self.theme.selection,
+            text_tertiary_color=self.theme.text_tertiary,
             parent=parent
         )
 
