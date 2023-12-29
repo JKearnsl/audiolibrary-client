@@ -1,15 +1,16 @@
+import atexit
 import os
 import shutil
 import sys
 import tempfile
-import atexit
 
 from PyQt6 import QtCore, QtGui
 from PyQt6.QtWidgets import QApplication, QStyleFactory
 
+from audiolibrary.api_service import APIServiceV1
 from audiolibrary.config import InIConfig
+from audiolibrary.controllers import ApplicationController
 from audiolibrary.models.main import MainModel
-from audiolibrary.controllers.main import MainController
 from audiolibrary.themes import BASE_THEME
 from audiolibrary.utils.theme import get_themes
 from audiolibrary.views.widgets import WidgetsFactory
@@ -39,6 +40,7 @@ def main():
     app_icon.addFile("icons:logo-32.png", QtCore.QSize(24, 24))
     app_icon.addFile("icons:logo-32.png", QtCore.QSize(32, 32))
     app_icon.addFile("icons:logo-64.png", QtCore.QSize(48, 48))
+    app_icon.addFile("icons:logo-64.png", QtCore.QSize(64, 64))
     app_icon.addFile("icons:logo-128.png", QtCore.QSize(128, 128))
     app_icon.addFile("icons:logo-256.png", QtCore.QSize(256, 256))
     app.setWindowIcon(app_icon)
@@ -62,14 +64,20 @@ def main():
         theme = BASE_THEME
 
     widgets_factory = WidgetsFactory(theme[0])
-
+    api_service = APIServiceV1(config.VAR.BASE.API_URL)
     model = MainModel(
         is_debug=config.VAR.BASE.DEBUG,
         app_title=config.VAR.BASE.APP_NAME,
         app_version=config.VAR.VERSION,
         contact=config.VAR.BASE.CONTACT,
+        api_service=api_service,
     )
-    controller = MainController(model, widgets_factory, config)
+    controller = ApplicationController(
+        api_service=api_service,
+        widgets_factory=widgets_factory,
+        config=config,
+    )
+    controller.main()
 
     app.exec()
 
