@@ -22,10 +22,9 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
         self.ui = UiMainWindow()
         self.ui.setup_ui(
             self,
-            theme_class=model.theme[0],
             widgets_factory=widgets_factory,
-            version=self.model.config.VAR.VERSION,
-            app_name=self.model.config.VAR.BASE.APP_NAME,
+            version=self.model.app_version,
+            app_name=self.model.app_title
         )
 
         self.scheduler = QtScheduler()
@@ -50,12 +49,12 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
     def model_loaded(self):
         for i in range(self.ui.menu_list_widget.model().rowCount()):
             item = self.ui.menu_list_widget.model().item(i)
-            item.set_icon_color(self.model.theme[0].text_primary)
+            item.set_icon_color(self.widgets_factory.theme.text_primary)
         self.ui.menu_list_widget.setCurrentIndex(self.ui.menu_list_widget.model().index(0, 0))
 
     def menu_select_changed(self, current: QModelIndex, prev: QModelIndex):
         item = self.ui.menu_list_widget.model().item(current.row())
-        item.set_icon_color(self.model.theme[0].text_tertiary)
+        item.set_icon_color(self.widgets_factory.theme.text_tertiary)
 
         if self.ui.content_layout.count() > 0:
             current_widget = self.ui.content_layout.currentWidget()
@@ -63,7 +62,7 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
                 return
 
             prev_item = self.ui.menu_list_widget.model().item(prev.row())
-            prev_item.set_icon_color(self.model.theme[0].text_primary)
+            prev_item.set_icon_color(self.widgets_factory.theme.text_primary)
 
             # Кэш
             for i in range(self.ui.content_layout.count()):
@@ -117,10 +116,10 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
         text_widget.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignTop)
         text_widget.setWordWrap(True)
         text_widget.setText(
-            f"### {self.model.config.VAR.BASE.APP_NAME} | {self.model.config.VAR.VERSION}\n\n"
+            f"### {self.model.app_title} | {self.model.app_version}\n\n"
             "Программа разработана в рамках курсовой работы\n\n\n"
             "Разработчик: "
-            f"<a href='{self.model.config.VAR.BASE.CONTACT.URL}'>{self.model.config.VAR.BASE.CONTACT.NAME}</a> 2023"
+            f"<a href='{self.model.contact.URL}'>{self.model.contact.NAME}</a> 2023"
             "\n\nОгромная благодарность за иконки: \n\n"
             '<a href="https://www.flaticon.com/ru/authors/kerismaker">kerismaker</a>\n\n'
             '<a href="https://www.flaticon.com/ru/authors/those-icons">those-icons</a>\n\n'
