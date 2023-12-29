@@ -1,3 +1,5 @@
+import logging
+import pickle
 from dataclasses import dataclass
 from enum import Enum
 from json import JSONDecodeError
@@ -28,10 +30,33 @@ class ErrorModel:
             self.content = [ErrorField(**field) for field in content]
 
 
+def get_http_session() -> httpx.Client:
+    session = httpx.Client()
+    try:
+        cookies = httpx.Cookies()
+        with open("session", "rb") as file:
+            jar_cookies = pickle.load(file)
+        for domain, pc in jar_cookies.items():
+            for path, c in pc.items():
+                for k, v in c.items():
+                    cookies.set(k, v.value, domain=domain, path=path)
+        session.cookies = cookies
+    except (FileNotFoundError, EOFError):
+        logging.info(" Файл сессии не найден")
+    return session
+
+
 class APIServiceV1:
-    def __init__(self, base_url: str, session: httpx.Client):
-        self.session = session
+    def __init__(self, base_url: str):
+        self.session = get_http_session()
         self._base_url = base_url + "/v1/"
+
+    def is_auth(self) -> bool:
+        if self.current_user().get("error"):
+            self.session.cookies.clear()
+            return False
+        return True
+
 
     def signup(self, username: str, hashed_password: str):
         try:
