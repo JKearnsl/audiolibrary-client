@@ -1,4 +1,8 @@
+import os
+import shutil
 import sys
+import tempfile
+import atexit
 
 from PyQt6 import QtCore, QtGui
 from PyQt6.QtWidgets import QApplication, QStyleFactory
@@ -17,6 +21,9 @@ def main():
     app.setStyle(QStyleFactory.create("Fusion"))
 
     QtCore.QDir.addSearchPath('icons', 'assets/icons')
+    tempfile.tempdir = os.path.join(os.path.expanduser("~"), ".audiolibrary", "tmp", str(os.getpid()))
+    os.makedirs(tempfile.tempdir, exist_ok=True)
+    atexit.register(lambda: shutil.rmtree(tempfile.tempdir))
 
     config = InIConfig("config.ini")
 
