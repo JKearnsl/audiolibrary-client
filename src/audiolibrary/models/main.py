@@ -20,5 +20,6 @@ class MainModel(BaseModel):
         super().__init__(theme)
         self.config = config
 
-    def get_ram_usage(self) -> int:
+    @staticmethod
+    def get_ram_usage() -> int:
         return int(psutil.Process().memory_info().rss / (1024 * 1024))
