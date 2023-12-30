@@ -8,7 +8,7 @@ class BaseTheme:
     first_background: str = "#ffffff"
     second_background: str = "#ffffff"
     third_background: str = "#ffffff"
-    selection: str = "#ffffff"
+    primary: str = "#ffffff"
     hover: str = "#ffffff"
     text_header: str = "#ffffff"
     text_primary: str = "#ffffff"

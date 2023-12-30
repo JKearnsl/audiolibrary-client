@@ -16,10 +16,10 @@ class SettingsView(Dialog, DObserver, metaclass=TSMeta):
     def __init__(self, controller, model: SettingsModel, widgets_factory, parent: ViewWidget):
         theme_class = widgets_factory.theme
         super().__init__(
-            third_background=theme_class.third_background,
-            second_background=theme_class.second_background,
-            hover=theme_class.hover,
-            text_header=theme_class.text_header,
+            background_window=theme_class.first_background,
+            background_close_btn=theme_class.second_background,
+            hover_close_btn=theme_class.hover,
+            text_color_close_btn=theme_class.text_header,
             parent=parent
         )
         self.controller = controller

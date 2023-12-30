@@ -13,11 +13,11 @@ class UiControlPage:
         customize_sheet = QtWidgets.QWidget(page)
         customize_sheet.setObjectName("customize_sheet")
         customize_sheet.setStyleSheet("""
-            QWidget#customize_sheet {
-                background-color: $BG3;
-            }
-        """.replace(
-            "$BG3", widgets_factory.theme.third_background)
+                QWidget#customize_sheet {
+                    background-color: $BG1;
+                }
+            """.replace(
+        "$BG1", widgets_factory.theme.first_background)
         )
         page_layout.addWidget(customize_sheet)
 

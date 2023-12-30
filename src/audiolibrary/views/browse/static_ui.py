@@ -14,10 +14,10 @@ class UiBrowsePage:
         customize_sheet.setObjectName("customize_sheet")
         customize_sheet.setStyleSheet("""
             QWidget#customize_sheet {
-                background-color: $BG3;
+                background-color: $BG1;
             }
         """.replace(
-            "$BG3", widgets_factory.theme.third_background)
+            "$BG1", widgets_factory.theme.first_background)
         )
         page_layout.addWidget(customize_sheet)
 

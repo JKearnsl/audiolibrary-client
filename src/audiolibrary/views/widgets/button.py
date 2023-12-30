@@ -3,33 +3,44 @@ from PyQt6.QtWidgets import QPushButton, QGraphicsDropShadowEffect
 
 
 class Button(QPushButton):
-    def __init__(self, hover_color, text_primary_color, third_background_color, parent=None):
+    def __init__(
+            self,
+            hover_color,
+            background_color,
+            text_hover_color,
+            text_primary_color,
+            parent=None
+    ):
         super().__init__(parent)
         self.setStyleSheet("""
             QPushButton {
-                background-color: $BG3;
-                border: 1px solid $HOVER;
+                background-color: $BG;
+                border: 1px solid #00000000;
                 border-radius: 4px;
                 padding: 2px 4px;
-                color: $TEXT;
+                color: $TEXT_PRIMARY;
             }
             QPushButton:hover {
                 background-color: $HOVER;
+                color: $TEXT_HOVER;
             }
             QPushButton:pressed {
-                background-color: $BG3;
+                background-color: $BG;
+                color: $TEXT_PRIMARY;
             }
             
             QPushButton:disabled {
                 background-color: $HOVER;
-                color: $TEXT;
+                color: $TEXT_PRIMARY;
             }
         """.replace(
             "$HOVER", hover_color,
         ).replace(
-            "$TEXT", text_primary_color,
+            "$TEXT_PRIMARY", text_primary_color
         ).replace(
-            "$BG3", third_background_color,
+            "$BG", background_color
+        ).replace(
+            "$TEXT_HOVER", text_hover_color
         ))
 
         self.setGraphicsEffect(QGraphicsDropShadowEffect(

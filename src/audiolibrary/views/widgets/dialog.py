@@ -7,10 +7,10 @@ class Dialog(QDialog):
 
     def __init__(
             self,
-            third_background,
-            second_background,
-            hover,
-            text_header,
+            background_window,
+            background_close_btn,
+            hover_close_btn,
+            text_color_close_btn,
             parent=None
     ):
         super().__init__(parent)
@@ -29,11 +29,11 @@ class Dialog(QDialog):
         sheet.setObjectName("sheet")
         sheet.setStyleSheet("""
             QWidget#sheet {
-                background-color: $BG3;
+                background-color: $BG;
                 border-radius: 10px;
             }
         """.replace(
-            "$BG3", third_background
+            "$BG", background_window
         ))
         dialog_layout.addWidget(sheet)
 
@@ -66,11 +66,11 @@ class Dialog(QDialog):
                 background-color: $BG2;
             }
         """.replace(
-            "$BG2", second_background
+            "$BG2", background_close_btn
         ).replace(
-            "$HOVER", hover
+            "$HOVER", hover_close_btn
         ).replace(
-            "$TEXT_HEADER", text_header
+            "$TEXT_HEADER", text_color_close_btn
         ))
 
         exit_button.setGraphicsEffect(QGraphicsDropShadowEffect(

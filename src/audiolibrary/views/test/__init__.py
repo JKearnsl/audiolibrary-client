@@ -18,7 +18,7 @@
 # from src.models.sort.heap import HeapSortModel
 # from src.models.sort.insertion import InsertionSortModel
 # from src.models.sort.merge import MergeSortModel
-# from src.models.sort.selection import SelectionSortModel
+# from src.models.sort.primary import SelectionSortModel
 # from src.models.sort.shell import ShellSortModel
 # from src.models.sort.tree import TreeSortModel
 #
