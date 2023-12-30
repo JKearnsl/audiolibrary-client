@@ -147,7 +147,7 @@ class WidgetsFactory:
 
     def outline_button(self, text: str = None, *, parent: QWidgetLike = None) -> ButtonOutline:
         btn = ButtonOutline(
-            self.theme.text_primary,
+            self.theme.text_tertiary,
             self.theme.hover,
             parent
         )
