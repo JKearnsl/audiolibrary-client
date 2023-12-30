@@ -18,7 +18,7 @@ def is_theme(theme_class: type) -> bool:
         getattr(theme_class, "first_background"),
         getattr(theme_class, "second_background"),
         getattr(theme_class, "third_background"),
-        getattr(theme_class, "selection"),
+        getattr(theme_class, "primary"),
         getattr(theme_class, "hover"),
         getattr(theme_class, "text_header"),
         getattr(theme_class, "text_primary"),
