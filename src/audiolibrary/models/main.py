@@ -19,7 +19,7 @@ class MainModel(BaseModel):
     def __init__(self, api_service: APIServiceV1, **scope):
         super().__init__()
         self.is_debug = scope["is_debug"]
-        self.is_auth = property(fget=lambda x: api_service.current_user().get("error") is None)
+        self.is_auth = api_service.is_auth
         self.app_title = scope["app_title"]
         self.app_version = scope["app_version"]
         self.contact = scope["contact"]

@@ -62,7 +62,7 @@ class MainController:
         ...
 
     def is_auth(self) -> bool:
-        return self.model.is_auth
+        return self.model.is_auth()
 
     def get_current_user(self) -> dict:
         return self.model.get_current_user()
