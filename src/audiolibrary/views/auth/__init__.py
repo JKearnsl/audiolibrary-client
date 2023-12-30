@@ -51,12 +51,12 @@ class AuthView(QtWidgets.QWidget, DObserver, metaclass=TSMeta):
             ))
 
     def signin_clicked(self):
-        login = self.ui.login_line_edit.text()
+        login = self.ui.username_line_edit.text()
         password = self.ui.password_line_edit.text()
         self.controller.signin(login, password)
 
     def signup_clicked(self):
-        login = self.ui.login_line_edit.text()
+        login = self.ui.username_line_edit.text()
         password = self.ui.password_line_edit.text()
         repeat_password = self.ui.repeat_password_line_edit.text()
         self.controller.signup(login, password, repeat_password)
