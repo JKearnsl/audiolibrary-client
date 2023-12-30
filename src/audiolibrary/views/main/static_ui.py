@@ -57,10 +57,7 @@ class UiMainWindow:
         menu_layout.addWidget(menu_header_widget)
 
         menu_header_layout = QtWidgets.QHBoxLayout(menu_header_widget)
-        menu_header_layout.setContentsMargins(0, 15, 0, 10)
-        menu_header_layout.addItem(
-            QtWidgets.QSpacerItem(20, 0, QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
-        )
+        menu_header_layout.setContentsMargins(20, 15, 20, 10)
 
         # Menu header info widget
         info_stub = QtWidgets.QWidget()
@@ -84,12 +81,13 @@ class UiMainWindow:
         program_title_layout.setSpacing(0)
         menu_header_info_layout.addLayout(program_title_layout)
 
-        program_name_widget = QtWidgets.QLabel()
-        program_name_widget.setObjectName("program_name_widget")
-        program_name_widget.setText(app_name)
-        program_name_widget.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter)
-        program_name_widget.setStyleSheet("""
-            QLabel#program_name_widget {
+        title_widget = QtWidgets.QLabel()
+        self.title_widget = title_widget
+        title_widget.setObjectName("title_widget")
+        title_widget.setText(app_name)
+        title_widget.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter)
+        title_widget.setStyleSheet("""
+            QLabel#title_widget {
                 font-size: 14px;
                 font-weight: 800;
                 color: $TEXT_HEADER;
@@ -97,13 +95,14 @@ class UiMainWindow:
         """.replace(
             "$TEXT_HEADER", widgets_factory.theme.text_header
         ))
-        program_title_layout.addWidget(program_name_widget)
+        program_title_layout.addWidget(title_widget)
 
-        program_version_widget = QtWidgets.QLabel()
-        program_version_widget.setObjectName("program_version_widget")
-        program_version_widget.setText(version)
-        program_version_widget.setStyleSheet("""
-            QLabel#program_version_widget {
+        description_widget = QtWidgets.QLabel()
+        self.description_widget = description_widget
+        description_widget.setObjectName("description_widget")
+        description_widget.setText(version)
+        description_widget.setStyleSheet("""
+            QLabel#description_widget {
                 font-size: 12px;
                 font-weight: bold;
                 color: $TEXT_SECONDARY;
@@ -111,7 +110,7 @@ class UiMainWindow:
         """.replace(
             "$TEXT_SECONDARY", widgets_factory.theme.text_secondary
         ))
-        program_title_layout.addWidget(program_version_widget)
+        program_title_layout.addWidget(description_widget)
 
         menu_header_layout.addItem(
             QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
@@ -123,14 +122,14 @@ class UiMainWindow:
         signin_button.setIcon(QtGui.QIcon(svg_ico("icons:signin.svg", widgets_factory.theme.text_primary)))
         signin_button.setIconSize(QtCore.QSize(32, 32))
         signin_button.setStyleSheet("""
-            QToolButton#signin_button {
+            QToolButton {
                 border-radius: 5px;
                 background-color: transparent;
             }
-            QToolButton#signin_button:hover {
+            QToolButton:hover {
                 background-color: $HOVER;
             }
-            QToolButton#signin_button:pressed {
+            QToolButton:pressed {
                 background-color: transparent;
             }
                 """.replace(
@@ -138,9 +137,14 @@ class UiMainWindow:
         ))
         self.signin_button = signin_button
         menu_header_info_layout.addWidget(signin_button)
-        menu_header_layout.addItem(
-            QtWidgets.QSpacerItem(20, 0, QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
-        )
+
+        logout_button = QtWidgets.QToolButton()
+        logout_button.setObjectName("logout_button")
+        logout_button.setIcon(QtGui.QIcon(svg_ico("icons:logout.svg", widgets_factory.theme.text_primary)))
+        logout_button.setIconSize(QtCore.QSize(32, 32))
+        logout_button.setStyleSheet(signin_button.styleSheet())
+        self.logout_button = logout_button
+        menu_header_info_layout.addWidget(logout_button)
 
         # Menu list
         menu_list_widget = widgets_factory.list()

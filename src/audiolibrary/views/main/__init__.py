@@ -52,6 +52,16 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
             item = self.ui.menu_list_widget.model().item(i)
             item.set_icon_color(self.widgets_factory.theme.text_primary)
         self.ui.menu_list_widget.setCurrentIndex(self.ui.menu_list_widget.model().index(0, 0))
+        if self.controller.is_auth():
+            self.ui.signin_button.hide()
+            self.ui.menu_settings_button.show()
+
+            current_user = self.controller.get_current_user()
+            self.ui.title_widget.setText(current_user["username"])
+            self.ui.description_widget.setText(current_user["role"]["title"])
+        else:
+            self.ui.signin_button.show()
+            self.ui.menu_settings_button.hide()
 
     def menu_select_changed(self, current: QModelIndex, prev: QModelIndex):
         item = self.ui.menu_list_widget.model().item(current.row())
