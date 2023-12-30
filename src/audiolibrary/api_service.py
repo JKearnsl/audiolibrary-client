@@ -57,14 +57,13 @@ class APIServiceV1:
             return False
         return True
 
-
-    def signup(self, username: str, hashed_password: str):
+    def signup(self, username: str, password: str):
         try:
             result = self.session.post(
                 self._base_url + "auth/signUp",
                 json=dict(
                     username=username,
-                    password=hashed_password,
+                    password=password,
                 )
             )
             if result.status_code == 201:
@@ -77,19 +76,19 @@ class APIServiceV1:
         except JSONDecodeError:
             return dict(error=dict(content="Неизвестная ошибка", type=1))
 
-    def signin(self, username: str, hashed_password: str):
+    def signin(self, username: str, password: str):
         try:
-            return self.session.post(
+            result = self.session.post(
                 self._base_url + "auth/signIn",
                 json=dict(
                     username=username,
-                    hashed_password=hashed_password,
+                    password=password,
                 ),
-            ).json()
+            )
+            if result.is_success:
+                return dict(message="ok")
         except (httpx.ConnectError, httpx.TimeoutException):
             return dict(error=dict(content="Ошибка соединения", type=1))
-        except JSONDecodeError:
-            return dict(error=dict(content="Неизвестная ошибка", type=1))
 
     def logout(self):
         try:
@@ -117,7 +116,7 @@ class APIServiceV1:
 
     def current_user(self):
         try:
-            return self.session.get(self._base_url + "user/current").json()
+            return self.session.get(self._base_url + "user").json()
         except (httpx.ConnectError, httpx.TimeoutException):
             return dict(error=dict(content="Ошибка соединения", type=1))
         except JSONDecodeError:
