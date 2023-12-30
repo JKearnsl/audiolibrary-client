@@ -15,6 +15,7 @@ class ButtonOutline(QPushButton):
                 background-color: transparent;
                 border: 2px solid $TEXT_COLOR;
                 border-radius: 4px;
+                font-weight: bold;
                 padding: 4px;
                 color: $TEXT_COLOR
             }
