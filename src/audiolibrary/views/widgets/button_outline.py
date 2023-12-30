@@ -1,3 +1,4 @@
+from PyQt6 import QtCore, QtGui
 from PyQt6.QtWidgets import QPushButton
 
 
@@ -12,10 +13,10 @@ class ButtonOutline(QPushButton):
         self.setStyleSheet("""
             QPushButton {
                 background-color: transparent;
-                border: 2px solid $TEXT_HOVER;
+                border: 2px solid $TEXT_COLOR;
                 border-radius: 4px;
                 padding: 4px;
-                color: $TEXT_HOVER
+                color: $TEXT_COLOR
             }
             QPushButton:hover {
                 border: 2px solid $TEXT_HOVER;
@@ -33,3 +34,4 @@ class ButtonOutline(QPushButton):
         ).replace(
             "$TEXT_HOVER", hover_color
         ))
+        self.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))

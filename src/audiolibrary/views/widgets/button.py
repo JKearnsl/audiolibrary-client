@@ -48,3 +48,4 @@ class Button(QPushButton):
             color=QtGui.QColor(0, 0, 0, 50),
             offset=QtCore.QPointF(0, 0)
         ))
+        self.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
