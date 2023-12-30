@@ -35,3 +35,6 @@ class ButtonOutline(QPushButton):
             "$TEXT_HOVER", hover_color
         ))
         self.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+
+    def add_style(self, style: str):
+        self.setStyleSheet(self.styleSheet() + style)

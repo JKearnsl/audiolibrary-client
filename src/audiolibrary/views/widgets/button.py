@@ -49,3 +49,6 @@ class Button(QPushButton):
             offset=QtCore.QPointF(0, 0)
         ))
         self.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+
+    def add_style(self, style: str):
+        self.setStyleSheet(self.styleSheet() + style)
