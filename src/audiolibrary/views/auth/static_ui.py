@@ -53,13 +53,17 @@ class UiAuthWindow(object):
         form_box.setMaximumSize(QtCore.QSize(350, 350))
         form_box.setContentsMargins(5, 5, 5, 5)
         form_box.setStyleSheet("""
-            QGroupBox#form_box {
+            QGroupBox {
                 background-color: transparent;
+                border: none;
+                outline: none;
             }
         """)
         form_box_layout = QtWidgets.QVBoxLayout()
         form_box_layout.setObjectName("form_box_layout")
         form_box_layout.setContentsMargins(5, 5, 5, 5)
+        form_box_layout.setSpacing(20)
+        form_box_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         form_box.setLayout(form_box_layout)
         self.form_column.addWidget(form_box)
         self.form_column.addItem(
@@ -67,15 +71,13 @@ class UiAuthWindow(object):
         )
 
         # Заголовок формы авторизации
-        self.title_label = widgets_factory.heading2()
+        self.title_label = widgets_factory.heading1()
         self.title_label.setObjectName("title_label")
         self.title_label.setText("Аутентификация")
         self.title_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.title_label.setContentsMargins(5, 5, 5, 10)
-        form_box_layout.addItem(QtWidgets.QSpacerItem(
-            10, 10, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.MinimumExpanding
-        ))
         form_box_layout.addWidget(self.title_label)
+
 
         # Ответ сервера
         self.response_label = QtWidgets.QLabel(window)
@@ -94,40 +96,70 @@ class UiAuthWindow(object):
 
         # Форма полей ввода
         form_layout = QtWidgets.QFormLayout()
-        form_layout.setObjectName("authFormHorizontalLayout")
-        form_layout.setContentsMargins(10, 10, 10, 0)
-        form_layout.setSpacing(12)
+        form_layout.setContentsMargins(0, 10, 0, 10)
+        form_layout.setSpacing(15)
         form_box_layout.addLayout(form_layout)
 
         # Поля
-        self.login_line_edit = widgets_factory.line_edit()
-        self.login_line_edit.setPlaceholderText("Имя пользователя")
+        self.username_line_edit = widgets_factory.line_edit()
+        self.username_line_edit.add_style("""
+            QLineEdit {
+                background-color: $BG2;
+                border-radius: 10px;
+                padding: 10px;
+                font-weight: bold;
+                border: none;
+            }
+        """.replace(
+            "$BG2", widgets_factory.theme.second_background
+        ))
+        self.username_line_edit.setPlaceholderText("Имя пользователя")
 
         self.password_line_edit = widgets_factory.line_edit()
-        self.password_line_edit.setObjectName("passwordLineEdit")
+        self.password_line_edit.setStyleSheet(self.username_line_edit.styleSheet())
         self.password_line_edit.setPlaceholderText("Пароль")
         self.password_line_edit.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
 
         self.repeat_password_line_edit = widgets_factory.line_edit()
-        self.repeat_password_line_edit.setObjectName("repeatPasswordLineEdit")
+        self.repeat_password_line_edit.setStyleSheet(self.username_line_edit.styleSheet())
         self.repeat_password_line_edit.setPlaceholderText("Повторите пароль")
         self.repeat_password_line_edit.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
 
+        # Кнопки
+        sign_layout = QtWidgets.QHBoxLayout()
+        column_btn = QtWidgets.QVBoxLayout()
+        sign_layout.addLayout(column_btn)
+
         self.signup_button = widgets_factory.primary_button()
         self.signup_button.setText("Зарегистрироваться")
+        self.signup_button.setFixedWidth(150)
+        self.signup_button.add_style("""
+            QPushButton {
+                padding: 10px;
+                border-radius: 10px;
+                font-weight: bold;
+            }
+        """)
+
+        column_btn.addWidget(self.signup_button)
 
         self.signin_button = widgets_factory.primary_button()
-        self.signin_button.setObjectName("signinButton")
-        self.signin_button.setText("Вход")
+        self.signin_button.setFixedWidth(100)
+        self.signin_button.setText("Войти")
+        self.signin_button.add_style("""
+            QPushButton {
+                padding: 10px;
+                border-radius: 10px;
+                font-weight: bold;
+            }
+        """)
+        column_btn.addWidget(self.signin_button)
 
-        form_layout.addWidget(self.login_line_edit)
+        form_layout.addWidget(self.username_line_edit)
         form_layout.addWidget(self.password_line_edit)
         form_layout.addWidget(self.repeat_password_line_edit)
-        form_layout.addWidget(self.signup_button)
-        form_layout.addWidget(self.signin_button)
-        form_box_layout.addItem(
-            QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
-        )
+
+        form_box_layout.addLayout(sign_layout)
 
         # Poster panel
         self.poster_panel = QtWidgets.QFrame()
@@ -139,6 +171,8 @@ class UiAuthWindow(object):
             }
         """.replace(
             "$BG3", widgets_factory.theme.third_background
+        ).replace(
+            "$BG1", widgets_factory.theme.first_background
         ))
         horizontal_layout.addWidget(self.poster_panel)
 
