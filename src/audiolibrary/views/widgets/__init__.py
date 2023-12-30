@@ -1,5 +1,6 @@
-from typing import TypeVar
+from typing import TypeVar, Literal
 
+from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QWidget
 
 from audiolibrary.themes.base import BaseTheme
@@ -18,6 +19,7 @@ from audiolibrary.views.widgets.heading import Heading6
 from audiolibrary.views.widgets.label import Label
 from audiolibrary.views.widgets.line_edit import LineEdit
 from audiolibrary.views.widgets.list import List
+from audiolibrary.views.widgets.message_box import MessageBox
 from audiolibrary.views.widgets.spin_box import SpinBox
 from audiolibrary.views.widgets.table import Table
 from audiolibrary.views.widgets.textarea import TextArea
@@ -120,6 +122,34 @@ class WidgetsFactory:
             text_color_close_btn=self.theme.text_header,
             parent=parent
         )
+
+    def message_box(
+            self,
+            title: str,
+            _type: Literal["info", "warning", "error"],
+            content: str,
+            parent: QWidgetLike = None
+    ) -> MessageBox:
+        if _type == "info":
+            icon = QIcon("icons:info.svg")
+        elif _type == "warning":
+            icon = QIcon("icons:warning.svg")
+        elif _type == "error":
+            icon = QIcon("icons:error.svg")
+        else:
+            raise ValueError("Unknown type")
+        _ = MessageBox(
+            title=_type.capitalize(),
+            content=content,
+            icon=icon,
+            background_window=self.theme.first_background,
+            background_close_btn=self.theme.second_background,
+            hover_close_btn=self.theme.hover,
+            text_color_close_btn=self.theme.text_header,
+            parent=parent
+        )
+        _.set_title(title)
+        return _
 
     def button(self, text: str = None, *, parent: QWidgetLike = None) -> Button:
         btn = Button(
