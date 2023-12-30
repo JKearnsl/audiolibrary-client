@@ -135,5 +135,6 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
         self.ui.context_menu.exec(self.ui.menu_settings_button.mapToGlobal(point))
 
     def closeEvent(self, event):
+        self.scheduler.pause()
         self.controller.close()
         event.accept()
