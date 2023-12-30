@@ -1,10 +1,9 @@
+from enum import Enum
+
 import psutil
 
 from audiolibrary.api_service import APIServiceV1
-from audiolibrary.config import Contact
 from audiolibrary.models.base import BaseModel
-
-from enum import Enum
 
 
 class MenuItem(str, Enum):
@@ -31,3 +30,10 @@ class MainModel(BaseModel):
     @staticmethod
     def get_ram_usage() -> int:
         return int(psutil.Process().memory_info().rss / (1024 * 1024))
+
+    def get_current_user(self):
+        result = self.api_service.current_user()
+        if result.get("error") is None:
+            return result.get("content")
+
+        self.raise_error(result.get("error"))
