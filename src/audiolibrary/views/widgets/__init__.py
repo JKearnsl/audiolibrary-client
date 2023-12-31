@@ -20,6 +20,7 @@ from audiolibrary.views.widgets.label import Label
 from audiolibrary.views.widgets.line_edit import LineEdit
 from audiolibrary.views.widgets.list import List
 from audiolibrary.views.widgets.message_box import MessageBox
+from audiolibrary.views.widgets.slide_show import SlideShow
 from audiolibrary.views.widgets.spin_box import SpinBox
 from audiolibrary.views.widgets.table import Table
 from audiolibrary.views.widgets.textarea import TextArea
@@ -150,6 +151,12 @@ class WidgetsFactory:
         )
         _.set_title(title)
         return _
+
+    def slide_show(self, parent: QWidgetLike = None) -> SlideShow:
+        return SlideShow(
+            background_color=self.theme.second_background,
+            parent=parent
+        )
 
     def button(self, text: str = None, *, parent: QWidgetLike = None) -> Button:
         btn = Button(
