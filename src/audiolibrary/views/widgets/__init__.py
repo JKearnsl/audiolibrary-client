@@ -9,6 +9,7 @@ from audiolibrary.views.widgets.button_outline import ButtonOutline
 from audiolibrary.views.widgets.combo_box import ComboBox
 from audiolibrary.views.widgets.dialog import Dialog
 from audiolibrary.views.widgets.double_spin_box import DoubleSpinBox
+from audiolibrary.views.widgets.file_select_box import FileSelectBox
 from audiolibrary.views.widgets.heading import Heading1
 from audiolibrary.views.widgets.heading import Heading2
 from audiolibrary.views.widgets.heading import Heading3
@@ -215,7 +216,7 @@ class WidgetsFactory:
             selection_color=self.theme.primary,
             primary_text_color=self.theme.text_primary,
             hover_color=self.theme.hover,
-            third_background_color=self.theme.third_background,
+            background_color=self.theme.first_background,
             parent=parent
         )
 
@@ -225,5 +226,15 @@ class WidgetsFactory:
             primary_text_color=self.theme.text_primary,
             hover_color=self.theme.hover,
             third_background_color=self.theme.third_background,
+            parent=parent
+        )
+
+    def file_select_box(self, parent: QWidgetLike = None) -> FileSelectBox:
+        return FileSelectBox(
+            background_color=self.theme.second_background,
+            hover_color=self.theme.hover,
+            text_color=self.theme.text_secondary,
+            icon_primary="icons:upload.svg",
+            icon_move="icons:drop-area.svg",
             parent=parent
         )
