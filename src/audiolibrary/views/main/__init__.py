@@ -3,11 +3,10 @@ from PyQt6.QtCore import QModelIndex
 from PyQt6.QtWidgets import QWidget
 from apscheduler.schedulers.qt import QtScheduler
 
-from audiolibrary.models import MenuItem
+from audiolibrary.models.main import MainModel
 from audiolibrary.utils.observer import DObserver
 from audiolibrary.utils.ts_meta import TSMeta
 from audiolibrary.views.main.static_ui import UiMainWindow
-from audiolibrary.models.main import MainModel
 from audiolibrary.views.widgets import WidgetsFactory
 
 
@@ -134,6 +133,7 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
             "\n\nОгромная благодарность за иконки: \n\n"
             '<a href="https://www.flaticon.com/ru/authors/kerismaker">kerismaker</a>\n\n'
             '<a href="https://www.flaticon.com/ru/authors/those-icons">those-icons</a>\n\n'
+            '<a href="https://www.svgrepo.com">svgrepo.com</a>\n\n'
 
         )
         central_layout.addWidget(text_widget)
