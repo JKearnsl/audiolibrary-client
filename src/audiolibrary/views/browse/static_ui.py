@@ -10,31 +10,70 @@ class UiBrowsePage:
         page_layout.setContentsMargins(0, 0, 0, 0)
         page_layout.setSpacing(0)
 
-        customize_sheet = QtWidgets.QWidget(page)
-        customize_sheet.setObjectName("customize_sheet")
-        customize_sheet.setStyleSheet("""
-            QWidget#customize_sheet {
+        scroll_area = QtWidgets.QScrollArea(page)
+        scroll_area.setObjectName("scroll_area")
+        scroll_area.setStyleSheet("""
+            QWidget#scroll_area {
                 background-color: $BG1;
+                border: none;
+                outline: none;
             }
         """.replace(
             "$BG1", widgets_factory.theme.first_background)
         )
-        page_layout.addWidget(customize_sheet)
+        scroll_area.setWidgetResizable(True)
+        page_layout.addWidget(scroll_area)
 
-        central_layout = QtWidgets.QVBoxLayout(customize_sheet)
-        central_layout.setContentsMargins(20, 20, 20, 20)
+        central_layout = QtWidgets.QVBoxLayout(scroll_area)
+        central_layout.setContentsMargins(30, 20, 30, 20)
         central_layout.setSpacing(10)
-        central_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignTop)
-
-        page_layout = QtWidgets.QVBoxLayout()
-        page_layout.setContentsMargins(0, 0, 0, 0)
-        page_layout.setSpacing(10)
-        central_layout.addLayout(page_layout)
+        central_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignTop)
 
         # Body
-        header = widgets_factory.label("bows")
-        page_layout.addWidget(header)
 
+        # SlideShow
+        slide_show = widgets_factory.slide_show()
+        central_layout.addWidget(slide_show)
+
+        # Search Block
+        search_block = QtWidgets.QWidget()
+        search_block.setObjectName("search_block")
+        search_block.setStyleSheet("""
+            QWidget#search_block {
+                background-color: $BG2;
+                border-radius: 5px;
+                border: 1px solid $HOVER;
+            }
+        """.replace(
+            "$BG2", widgets_factory.theme.second_background
+        ).replace(
+            "$HOVER", widgets_factory.theme.hover
+        ))
+
+        search_block_layout = QtWidgets.QVBoxLayout(search_block)
+        search_block_layout.setContentsMargins(0, 0, 0, 0)
+        central_layout.addWidget(search_block)
+
+        search_line = widgets_factory.line_edit()
+        search_line.setObjectName("search_line")
+        search_line.setPlaceholderText("Поиск")
+        search_block_layout.addWidget(search_line)
+
+        result_list = widgets_factory.list()
+        result_list.setObjectName("result_list")
+        result_list.setFixedHeight(200)
+        result_list.hide()
+        search_block_layout.addWidget(result_list)
+        search_block_layout.addStretch(1)
+        search_line.focusIn.connect(lambda: result_list.show())
+        search_line.focusOut.connect(lambda: result_list.hide() if not search_line.text() else None)
+
+
+
+
+
+
+        central_layout.addStretch(1)
         self.translate_ui(page)
         QtCore.QMetaObject.connectSlotsByName(page)
 
