@@ -1,7 +1,14 @@
 from PyQt6 import QtCore, QtGui
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLayout, QHBoxLayout, QWidget, QGraphicsDropShadowEffect, \
+from PyQt6.QtWidgets import (
+    QDialog,
+    QVBoxLayout,
+    QPushButton,
+    QLayout,
+    QHBoxLayout,
+    QWidget,
+    QGraphicsDropShadowEffect,
     QLabel
+)
 
 
 class Dialog(QDialog):
@@ -26,7 +33,22 @@ class Dialog(QDialog):
         dialog_layout.setContentsMargins(0, 0, 0, 0)
         dialog_layout.setSpacing(0)
 
-        sheet = QWidget(self)
+        shadow_sheet = QWidget(self)
+        shadow_sheet.setObjectName("shadow_sheet")
+        shadow_sheet.setStyleSheet(
+            """
+                QWidget#shadow_sheet {
+                    border-radius: 10px;
+                }
+            """
+        )
+        dialog_layout.addWidget(shadow_sheet)
+
+        shadow_sheet_layout = QHBoxLayout(shadow_sheet)
+        shadow_sheet_layout.setContentsMargins(5, 5, 5, 5)
+        shadow_sheet_layout.setSpacing(0)
+
+        sheet = QWidget(shadow_sheet)
         sheet.setObjectName("sheet")
         sheet.setStyleSheet("""
             QWidget#sheet {
@@ -36,7 +58,12 @@ class Dialog(QDialog):
         """.replace(
             "$BG", background_window
         ))
-        dialog_layout.addWidget(sheet)
+        sheet.setGraphicsEffect(QGraphicsDropShadowEffect(
+            blurRadius=10,
+            color=QtGui.QColor(0, 0, 0, 50),
+            offset=QtCore.QPointF(0, 0)
+        ))
+        shadow_sheet_layout.addWidget(sheet)
 
         general_layout = QVBoxLayout(sheet)
         general_layout.setContentsMargins(0, 0, 0, 0)
@@ -77,7 +104,7 @@ class Dialog(QDialog):
         exit_button.setGraphicsEffect(QGraphicsDropShadowEffect(
             blurRadius=10,
             color=QtGui.QColor(0, 0, 0, 50),
-            offset=QtCore.QPointF(0, 0)
+            offset=QtCore.QPointF(-1, 0)
         ))
         exit_button.clicked.connect(self.close)
 
