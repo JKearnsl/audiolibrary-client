@@ -7,7 +7,7 @@ class TextArea(QPlainTextEdit):
             selection_color,
             primary_text_color,
             hover_color,
-            third_background_color,
+            background_color,
             parent=None
     ):
         super().__init__(parent)
@@ -19,7 +19,7 @@ class TextArea(QPlainTextEdit):
                 border: 2px solid $HOVER;
                 border-radius: 5px;
                 padding: 1px 10px 1px 3px;
-                background: $BG3;
+                background: $BG;
                 color: $PRIMARY_TEXT_COLOR;
             }
             QPlainTextEdit:focus {
@@ -35,7 +35,7 @@ class TextArea(QPlainTextEdit):
         ).replace(
             "$HOVER", hover_color
         ).replace(
-            "$BG3", third_background_color
+            "$BG", background_color
         ))
         self.__hover_color = hover_color
         self.__selection_color = selection_color
