@@ -28,13 +28,13 @@ class MessageBox(Dialog):
 
         self.setObjectName(f"message_box_{title.replace(' ', '_')}")
 
-        content = self.layout()
-        content.setContentsMargins(0, 0, 0, 0)
-        content.setSpacing(0)
+        content_layout = self.layout()
+        content_layout.setContentsMargins(0, 0, 0, 0)
+        content_layout.setSpacing(0)
 
         customize_sheet = QWidget(self)
         customize_sheet.setObjectName("customize_sheet")
-        content.addWidget(customize_sheet)
+        content_layout.addWidget(customize_sheet)
 
         central_layout = QHBoxLayout(customize_sheet)
         central_layout.setContentsMargins(20, 20, 20, 20)
