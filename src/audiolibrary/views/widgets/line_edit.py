@@ -1,7 +1,11 @@
+from PyQt6 import QtCore
 from PyQt6.QtWidgets import QLineEdit
 
 
 class LineEdit(QLineEdit):
+    focusIn = QtCore.pyqtSignal()
+    focusOut = QtCore.pyqtSignal()
+
     def __init__(
             self,
             selection_color,
@@ -112,3 +116,11 @@ class LineEdit(QLineEdit):
     def __check_required(self):
         if len(self.text()) == 0:
             self.set_error()
+
+    def focusInEvent(self, a0):
+        super().focusInEvent(a0)
+        self.focusIn.emit()
+
+    def focusOutEvent(self, a0):
+        super().focusOutEvent(a0)
+        self.focusOut.emit()
