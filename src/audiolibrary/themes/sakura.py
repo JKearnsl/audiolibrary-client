@@ -1,4 +1,4 @@
-from src.themes.base import BaseTheme
+from audiolibrary.themes.base import BaseTheme
 
 
 class SakuraTheme(BaseTheme):
@@ -11,8 +11,9 @@ class SakuraTheme(BaseTheme):
     first_background: str = "#FFAEBD"
     second_background: str = "#FFE0E6"
     third_background: str = "#FFFFFF"
-    selection: str = "#bf848f"
+    primary: str = "#bf848f"
     hover: str = "#E0C6CB"
     text_header: str = "#c43f59"
     text_primary: str = "#010000"
     text_secondary: str = "#909fa6"
+    text_tertiary: str = "#ffffff"
