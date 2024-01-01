@@ -51,7 +51,7 @@ class SettingsView(Dialog, DObserver, metaclass=TSMeta):
         self.model_changed()
 
     def change_theme(self, index):
-        old_theme = self.model.theme[0]
+        old_theme = self.widgets_factory.theme
         new_theme = self.ui.ch_color_theme_widget.itemData(index)
         result = self.ui.ch_color_theme_dialog.exec()
         if result == 0:

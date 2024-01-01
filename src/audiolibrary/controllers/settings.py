@@ -17,6 +17,6 @@ class SettingsController:
         self.model.change_theme(theme_name)
 
     @staticmethod
-    def reboot(self):
+    def reboot():
         # TODO: Пусть это вызывается в модели
         os.execl(sys.executable, sys.executable, *sys.argv)
