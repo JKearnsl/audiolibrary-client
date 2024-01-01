@@ -33,6 +33,28 @@ class UiBrowsePage:
 
         # SlideShow
         slide_show = widgets_factory.slide_show()
+
+        button = widgets_factory.button()
+        slide_show.add_slide(
+            image_path="/home/jkearnsl/Изображения/fec910ef1203e78b4c3a6fbe4b9a8f7e.jpg",
+            title="Название альбома",
+            description="Описание альбома",
+            button=button
+        )
+        button2 = widgets_factory.button()
+        slide_show.add_slide(
+            image_path="/home/jkearnsl/Изображения/akKFtPZtBJ0.jpg",
+            title="Название альбома2",
+            description="Описание альбома2",
+            button=button2
+        )
+        button3 = widgets_factory.button()
+        slide_show.add_slide(
+            image_path="/home/jkearnsl/Изображения/wallpaper/iybTCTjKNos.jpg",
+            title="Название альбома3",
+            description="Описание альбома3",
+            button=button3
+        )
         central_layout.addWidget(slide_show)
 
         # Search Block
@@ -67,11 +89,6 @@ class UiBrowsePage:
         search_block_layout.addStretch(1)
         search_line.focusIn.connect(lambda: result_list.show())
         search_line.focusOut.connect(lambda: result_list.hide() if not search_line.text() else None)
-
-
-
-
-
 
         central_layout.addStretch(1)
         self.translate_ui(page)
