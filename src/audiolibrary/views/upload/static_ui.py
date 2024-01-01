@@ -50,6 +50,7 @@ class UiUploadPage:
         fields_layout = QtWidgets.QFormLayout()
         fields_layout.setContentsMargins(0, 0, 0, 0)
         fields_layout.setSpacing(10)
+        fields_layout.setLabelAlignment(QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignTop)
         from_block_layout.addLayout(fields_layout)
 
         # Title
@@ -59,6 +60,7 @@ class UiUploadPage:
         self.title_line = title_line
 
         self.title_label = widgets_factory.label()
+        self.title_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         fields_layout.addRow(self.title_label, title_line)
 
         # Description
@@ -68,6 +70,7 @@ class UiUploadPage:
         self.description_text = description_text
 
         self.description_label = widgets_factory.label()
+        self.description_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         fields_layout.addRow(self.description_label, description_text)
 
         # Artist
@@ -110,14 +113,16 @@ class UiUploadPage:
         artist_tools_layout.addStretch(1)
 
         self.artist_label = widgets_factory.label()
+        self.artist_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
 
         fields_layout.addRow(self.artist_label, artist_block)
 
-
-        # File
+        # File Block
         file_block = widgets_factory.file_select_box()
         self.file_block = file_block
-        from_block_layout.addWidget(file_block)
+        self.file_label = widgets_factory.label()
+        self.file_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
+        fields_layout.addRow(self.file_label, file_block)
 
         # Rules Policy
         rules_block = QtWidgets.QWidget()
@@ -133,7 +138,7 @@ class UiUploadPage:
         ).replace(
             "$HOVER", widgets_factory.theme.hover
         ))
-        from_block_layout.addWidget(rules_block)
+
         from_block_layout.addStretch(1)
 
         # Controls
@@ -153,11 +158,6 @@ class UiUploadPage:
 
         from_block_layout.addLayout(controls_layout)
 
-
-
-
-
-
         self.translate_ui(page)
         QtCore.QMetaObject.connectSlotsByName(page)
 
@@ -170,3 +170,4 @@ class UiUploadPage:
         self.reset_button.setText(_translate("upload_page_audio_reset", "Сбросить"))
         self.send_button.setText(_translate("upload_page_audio_send", "Отправить"))
         self.file_block.set_text(_translate("upload_page_audio_file", "Выберите или перетащите файл"))
+        self.file_label.setText(_translate("upload_page_audio_file", "Файл"))
