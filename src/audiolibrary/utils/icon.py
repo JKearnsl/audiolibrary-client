@@ -14,12 +14,13 @@ def set_attr_recur(elem, tagname, attr, attr_val):
             set_attr_recur(child.toElement(), tagname, attr, attr_val)
 
 
-def svg_ico(ico_filepath, color='black') -> QIcon:
+def svg_ico(ico_filepath, color='black', attr_color: str = "fill") -> QIcon:
     """
     Создать svg иконку с цветом заливки
 
     :param ico_filepath: path to any icon file
     :param color: any str color
+    :param attr_color: svg attribute name
 
     :return: QIcon
     """
@@ -29,7 +30,7 @@ def svg_ico(ico_filepath, color='black') -> QIcon:
     doc.setContent(file.readAll())
     file.close()
 
-    set_attr_recur(doc.documentElement(), 'path', 'fill', color)
+    set_attr_recur(doc.documentElement(), 'path', attr_color, color)
 
     temp_file = tempfile.NamedTemporaryFile(suffix='.svg', delete=False)
     temp_file.write(doc.toByteArray())
