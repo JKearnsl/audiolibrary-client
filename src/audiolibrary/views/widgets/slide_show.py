@@ -50,6 +50,8 @@ class ColorSwitcherAnimation(QVariantAnimation):
             QToolButton {
                 background-color: $COLOR;
                 border-radius: 0px;
+                border: none;
+                outline: none;
             }
         """.replace(
             "$COLOR", color.name()
