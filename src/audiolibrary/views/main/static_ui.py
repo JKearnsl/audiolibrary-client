@@ -172,11 +172,11 @@ class UiMainWindow:
         menu_tool_layout = QtWidgets.QHBoxLayout()
         menu_settings_button = QtWidgets.QToolButton()
         menu_settings_button.setObjectName("menu_settings_button")
-        menu_settings_button.setIcon(QtGui.QIcon("icons:settings-64.png"))
-        menu_settings_button.setIconSize(QtCore.QSize(16, 16))
+        menu_settings_button.setIcon(svg_ico("icons:settings.svg", widgets_factory.theme.text_secondary))
+        menu_settings_button.setIconSize(QtCore.QSize(20, 20))
         menu_settings_button.setStyleSheet("""
             QToolButton#menu_settings_button {
-                border-radius: 3px;
+                border-radius: 10px;
                 background-color: transparent;
             }
             QToolButton#menu_settings_button:hover {
