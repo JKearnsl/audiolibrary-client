@@ -340,16 +340,16 @@ class SlideShow(QWidget):
             raise ValueError("Invalid _type value")
 
         # Установка свойств анимаций
-        center_animation1.setDuration(1000)
+        center_animation1.setDuration(700)
         center_animation1.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-        center_animation2.setDuration(1000)
+        center_animation2.setDuration(700)
         center_animation2.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-        arrow_animation1.setDuration(1000)
+        arrow_animation1.setDuration(700)
         arrow_animation1.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-        arrow_animation2.setDuration(1000)
+        arrow_animation2.setDuration(700)
         arrow_animation2.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
         # Добавление анимаций в буфер
