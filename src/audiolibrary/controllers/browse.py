@@ -12,3 +12,5 @@ class BrowseController:
         self.view.show()
         self.view.model_loaded()
 
+    def search(self, query: str):
+        return self.model.search(query)
