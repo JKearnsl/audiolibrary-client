@@ -1,4 +1,4 @@
-from PyQt6 import QtCore, QtWidgets, QtGui
+from PyQt6 import QtCore, QtWidgets
 
 from audiolibrary.views.widgets import WidgetsFactory
 
@@ -78,7 +78,7 @@ class UiBrowsePage:
 
         search_line = widgets_factory.line_edit()
         search_line.setObjectName("search_line")
-        search_line.setPlaceholderText("Поиск")
+        self.search_line = search_line
         search_block_layout.addWidget(search_line)
 
         result_list = widgets_factory.list()
@@ -89,6 +89,7 @@ class UiBrowsePage:
         search_block_layout.addStretch(1)
         search_line.focusIn.connect(lambda: result_list.show())
         search_line.focusOut.connect(lambda: result_list.hide() if not search_line.text() else None)
+        self.result_list = result_list
 
         central_layout.addStretch(1)
         self.translate_ui(page)
@@ -96,3 +97,4 @@ class UiBrowsePage:
 
     def translate_ui(self, page: QtWidgets.QWidget):
         _translate = QtCore.QCoreApplication.translate
+        self.search_line.setPlaceholderText(_translate("browse_page_search_placeholder", "Поиск"))
