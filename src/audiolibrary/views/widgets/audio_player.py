@@ -127,8 +127,8 @@ class AudioPlayer(QWidget):
             "$HOVER", hover
         ))
         music_cover.setPixmap(
-            svg_ico("icons:music-note.svg", primary).pixmap(20, 20, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
-        music_cover.setContentsMargins(10, 10, 10, 10)
+            svg_ico("icons:music-note.svg", primary).pixmap(20, 20))
+        music_cover.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.music_cover = music_cover
         music_info_layout.addWidget(music_cover)
 
@@ -223,6 +223,37 @@ class AudioPlayer(QWidget):
         music_title.setText("Title")
         time_label.setText("00:00")
 
+        # Volume Slider
+        volume_slider = QSlider()
+        volume_slider.setObjectName("volume_slider")
+        volume_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
+        volume_slider.setStyleSheet("""
+            QSlider#volume_slider {
+                background-color: transparent;
+            }
+            QSlider::groove:horizontal {
+                border-radius: 5px;
+                height: 5px;
+                background-color: $HOVER;
+            }
+            QSlider::handle:horizontal {
+                width: 10px;
+                margin: -2px 0;
+                border-radius: 5px;
+                background-color: $PRIMARY;
+            }
+        """.replace(
+            "$HOVER", hover
+        ).replace(
+            "$PRIMARY", primary
+        ))
+        self.volume_slider = volume_slider
+        volume_slider.setValue(100)
+        volume_slider.setMaximum(100)
+        volume_slider.setMinimum(0)
+        volume_slider.setFixedWidth(100)
+        central_layout.addWidget(volume_slider)
+
         # Media Player
         media_widget = QMediaPlayer()
         self.media_widget = media_widget
@@ -251,6 +282,7 @@ class AudioPlayer(QWidget):
         time_line_widget.sliderMoved.connect(
             lambda position: time_label.setText(f"{position // 1000 // 60}:{position // 1000 % 60:02}")
         )
+        volume_slider.valueChanged.connect(lambda position: audio_output.setVolume(position))
 
     def layout(self) -> QLayout | None:
         return self._layout
