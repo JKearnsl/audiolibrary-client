@@ -1,4 +1,5 @@
 from PyQt6 import QtCore, QtWidgets
+from PyQt6.QtWidgets import QListWidget
 
 from audiolibrary.views.widgets import WidgetsFactory
 
@@ -81,9 +82,14 @@ class UiBrowsePage:
         self.search_line = search_line
         search_block_layout.addWidget(search_line)
 
-        result_list = widgets_factory.list()
+        result_list = QListWidget()
         result_list.setObjectName("result_list")
-        result_list.setFixedHeight(200)
+        result_list.setStyleSheet("""
+            QListWidget#result_list {
+                background-color: transparent;
+            }
+        """)
+        result_list.setSizePolicy(QtWidgets.QSizePolicy.Policy.MinimumExpanding, QtWidgets.QSizePolicy.Policy.MinimumExpanding)
         result_list.hide()
         search_block_layout.addWidget(result_list)
         search_block_layout.addStretch(1)
