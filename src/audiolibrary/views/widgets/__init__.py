@@ -4,6 +4,7 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QWidget
 
 from audiolibrary.themes.base import BaseTheme
+from audiolibrary.views.widgets.audio_item import AudioItemWidget
 from audiolibrary.views.widgets.audio_player import AudioPlayer
 from audiolibrary.views.widgets.button import Button
 from audiolibrary.views.widgets.button_outline import ButtonOutline
@@ -245,4 +246,23 @@ class WidgetsFactory:
             primary=self.theme.primary,
             hover=self.theme.hover,
             text_secondary=self.theme.text_secondary,
+        )
+
+    def audio_item(
+            self,
+            title: str,
+            subtitle: str,
+            _id: any, *,
+            cover=None,
+            parent: QWidgetLike = None
+    ) -> AudioItemWidget:
+        return AudioItemWidget(
+            title,
+            subtitle,
+            _id,
+            self.theme.hover,
+            self.theme.primary,
+            self.theme.text_secondary,
+            cover,
+            parent
         )
