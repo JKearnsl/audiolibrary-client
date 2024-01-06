@@ -83,7 +83,7 @@ getent passwd | while IFS=: read -r username _ uid _ _ home _; do
   if [ "$uid" -ge 1000 ] && [ -d "$home" ]; then
     mkdir -p "$home/.audiolibrary"
     cp ./config.ini "$home/.audiolibrary/config.ini"
-    chown "$username":"$username" "$home/.audiolibrary/config.ini"
+    chown -R "$username":"$username" "$home/.audiolibrary"
   fi
 done
 
