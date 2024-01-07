@@ -12,7 +12,14 @@ from audiolibrary.views.widgets import WidgetsFactory
 
 class MainView(QWidget, DObserver, metaclass=TSMeta):
 
-    def __init__(self, controller, model: MainModel, widgets_factory: WidgetsFactory, parent=None):
+    def __init__(
+            self,
+            controller,
+            model: MainModel,
+            widgets_factory: WidgetsFactory,
+            deeplink_event_bus,
+            parent=None
+    ):
         super().__init__(parent)
         self.controller = controller
         self.model = model
@@ -40,6 +47,9 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
         self.ui.about_item.triggered.connect(self.about_dialog)
         self.ui.signin_button.clicked.connect(self.controller.show_auth)
 
+        # DeepLink
+        deeplink_event_bus.news.connect(self.show_news)
+
     def model_changed(self):
         pass
 
@@ -61,6 +71,9 @@ class MainView(QWidget, DObserver, metaclass=TSMeta):
         else:
             self.ui.signin_button.show()
             self.ui.logout_button.hide()
+
+    def show_news(self, news_id: str):
+        print(news_id)
 
     def menu_select_changed(self, current: QModelIndex, prev: QModelIndex):
         item = self.ui.menu_list_widget.model().item(current.row())

@@ -14,12 +14,20 @@ from audiolibrary.views.widgets import WidgetsFactory
 
 class MainController:
 
-    def __init__(self, model: 'MainModel', widgets_factory: 'WidgetsFactory', config: 'InIConfig', app_controller):
+    def __init__(
+            self,
+            model: 'MainModel',
+            widgets_factory: 'WidgetsFactory',
+            config: 'InIConfig',
+            deeplink_event_bus,
+            app_controller
+    ):
         self.model = model
         self.config = config
         self.widgets_factory = widgets_factory
+        self.deeplink_event_bus = deeplink_event_bus
         self.app_controller = app_controller
-        self.view = MainView(self, self.model, widgets_factory)
+        self.view = MainView(self, model, widgets_factory, deeplink_event_bus)
 
         self.view.show()
         self.view.model_loaded()

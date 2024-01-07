@@ -1,3 +1,4 @@
+from audiolibrary.config import InIConfig
 from audiolibrary.controllers.auth import AuthController
 from audiolibrary.controllers.main import MainController
 from audiolibrary.models import MainModel
@@ -12,10 +13,17 @@ class ApplicationController:
 
     """
 
-    def __init__(self, api_service, widgets_factory: 'WidgetsFactory', config):
+    def __init__(
+            self,
+            api_service,
+            widgets_factory: WidgetsFactory,
+            config: InIConfig,
+            deeplink_event_bus
+    ):
         self.api_service = api_service
         self.widgets_factory = widgets_factory
         self.config = config
+        self.deeplink_event_bus = deeplink_event_bus
 
     def auth(self):
         AuthController(
@@ -37,5 +45,6 @@ class ApplicationController:
             ),
             self.widgets_factory,
             self.config,
+            self.deeplink_event_bus,
             self
         )
