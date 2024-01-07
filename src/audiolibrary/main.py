@@ -4,21 +4,27 @@ import os
 import shutil
 import sys
 import tempfile
+from urllib.parse import urlparse
 
 from PyQt6 import QtCore, QtGui
-from PyQt6.QtCore import QLockFile, QEvent
+from PyQt6.QtNetwork import QLocalSocket, QLocalServer, QAbstractSocket
 from PyQt6.QtWidgets import QApplication, QStyleFactory
 
 from audiolibrary.api_service import APIServiceV1
 from audiolibrary.config import InIConfig
 from audiolibrary.controllers import ApplicationController
-from audiolibrary.models.main import MainModel
 from audiolibrary.themes import BASE_THEME
 from audiolibrary.utils.theme import get_themes
 from audiolibrary.views.widgets import WidgetsFactory
 
 
-class SingleApplication(QApplication):
+class DeepLinkEventBus(QtCore.QObject):
+    album = QtCore.pyqtSignal(str)
+    track = QtCore.pyqtSignal(str)
+    news = QtCore.pyqtSignal(str)
+
+
+class AudioLibraryApp(QApplication):
     def __init__(self, *args):
         super().__init__(*args)
         data_path = os.path.join(os.path.expanduser("~"), ".audiolibrary")
@@ -26,11 +32,43 @@ class SingleApplication(QApplication):
         os.makedirs(tempfile.tempdir, exist_ok=True)
         atexit.register(lambda: shutil.rmtree(tempfile.tempdir))
 
-        self._lockfile = QLockFile(os.path.join(data_path, "lockfile"))
+        self._server = None
+        self._client = QLocalSocket()
+        self._client.connectToServer(self.__class__.__name__)
 
-        if not self._lockfile.tryLock(100):
-            logging.error("Приложение уже запущено")
-            sys.exit(1)
+        deep_link: str | None = (
+            args[0][args[0].index("--"):][-1]
+            if "--" in args[0] and len(args[0][args[0].index("--"):]) > 0
+            else None
+        )
+        if self._client.waitForConnected(500):
+            if deep_link:
+                self._client.write(deep_link.encode())
+                self._client.waitForBytesWritten()
+            self._client.disconnectFromServer()
+            sys.exit(0)
+
+        self._server = QLocalServer()
+        self._server.listen(self.__class__.__name__)
+        if not self._server.isListening():
+            match self._server.serverError():
+                case QAbstractSocket.SocketError.AddressInUseError:
+                    logging.warning("[Server] ServerError: Address in use, trying to remove server.")
+                    QLocalServer.removeServer(self.__class__.__name__)
+                    self._server.listen(self.__class__.__name__)
+                    if not self._server.isListening():
+                        raise RuntimeError("ServerError: Address in use.")
+                case QAbstractSocket.SocketError.ConnectionRefusedError:
+                    raise RuntimeError("ServerError: Connection refused.")
+                case QAbstractSocket.SocketError.HostNotFoundError:
+                    raise RuntimeError("ServerError: Host not found.")
+                case _:
+                    raise RuntimeError("ServerError: Unknown error.")
+        else:
+            logging.debug(f"[Server] Listening on {self._server.serverName()}")
+
+        self.deeplink_event_bus = DeepLinkEventBus()
+        self._server.newConnection.connect(self.handle_deep_link)
 
         QApplication.setDesktopSettingsAware(False)
         self.setStyle(QStyleFactory.create("Fusion"))
@@ -84,33 +122,54 @@ class SingleApplication(QApplication):
 
         widgets_factory = WidgetsFactory(theme[0])
         api_service = APIServiceV1(config.VAR.BASE.API_URL)
-        model = MainModel(
-            is_debug=config.VAR.BASE.DEBUG,
-            app_title=config.VAR.BASE.APP_NAME,
-            app_version=config.VAR.VERSION,
-            contact=config.VAR.BASE.CONTACT,
-            api_service=api_service,
-        )
+
         controller = ApplicationController(
             api_service=api_service,
             widgets_factory=widgets_factory,
             config=config,
+            deeplink_event_bus=self.deeplink_event_bus,
         )
         controller.main()
 
+        if deep_link:
+            self._client.write(deep_link.encode())
+
         self.exec()
 
-    def event(self, event):
-        if event.type() == QEvent.Type.FileOpen:
-            deep_link = event.file()
-            print(f"Received Deep Link: {deep_link}")
+    def handle_deep_link(self):
+        while self._server.hasPendingConnections():
+            client = self._server.nextPendingConnection()
+            if client.waitForReadyRead():
+                content = client.readAll().data().decode()
 
-            # Обработка Deep Link
-            # Например, разберите URL и выполните нужные действия в приложении
+                # check schema
+                try:
+                    url = urlparse(content)
+                    if not all([url.scheme == "audiolibrary", url.netloc]):
+                        raise ValueError
+                except ValueError:
+                    logging.warning(f"[Server] Invalid DeepLink: {content}")
+                    return
+                logging.info(f"[Server] Open DeepLink: {content}")
 
-            return True  # Указывает, что событие обработано
-        return super().event(event)
+                # Match url.netloc
+                match url.netloc:
+                    case "album":
+                        self.deeplink_event_bus.album.emit(url.path.replace("/", ""))
+                    case "track":
+                        self.deeplink_event_bus.track.emit(url.path.replace("/", ""))
+                    case "news":
+                        self.deeplink_event_bus.news.emit(url.path.replace("/", ""))
+                    case _:
+                        logging.warning(f"[Server] Invalid DeepLink: {content}")
+                        return
+
+    def __del__(self):
+        logging.info("[Server] Closing server")
+        if self._server:
+            self._server.close()
+            QLocalServer.removeServer(self.__class__.__name__)
 
 
 if __name__ == '__main__':
-    SingleApplication(sys.argv)
+    AudioLibraryApp(sys.argv)
